@@ -1,0 +1,40 @@
+public class Experiment {
+    private Sorter sorter = new Sorter();
+    private Searcher searcher = new Searcher();
+
+    public void runAllExperiments() {
+        int[] sizes = {10, 100, 1000};
+        for (int size : sizes) {
+            System.out.println("\n--- Size: " + size + " ---");
+
+
+            int[] randomArr = sorter.generateRandomArray(size);
+            int[] copyArr = randomArr.clone();
+
+            System.out.println("Type: Random");
+            System.out.println("Basic Sort: " + measureSortTime(randomArr, "basic") + " ns");
+            System.out.println("Advanced Sort: " + measureSortTime(copyArr, "advanced") + " ns");
+            sorter.advancedSort(randomArr);
+            System.out.println("Search: " + measureSearchTime(randomArr, randomArr[size/2]) + " ns");
+
+
+            System.out.println("Type: Sorted");
+
+            System.out.println("Basic Sort: " + measureSortTime(randomArr, "basic") + " ns");
+            System.out.println("Advanced Sort: " + measureSortTime(copyArr, "advanced") + " ns");
+        }
+    }
+
+    private long measureSortTime(int[] arr, String type) {
+        long start = System.nanoTime();
+        if (type.equals("basic")) sorter.basicSort(arr);
+        else sorter.advancedSort(arr);
+        return System.nanoTime() - start;
+    }
+
+    private long measureSearchTime(int[] arr, int target) {
+        long start = System.nanoTime();
+        searcher.search(arr, target);
+        return System.nanoTime() - start;
+    }
+}
